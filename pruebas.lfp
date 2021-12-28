@@ -1,1 +1,7 @@
-nombre_de_red('Ingenieria en Ciencias y Sistemas')
+nombre_de_red('Ingenieria en Ciencias y Sistemas');
+crearcurso(1, 17, 'Social Humanistica 1', []);
+crearcurso(1, 101, 'MB1', []);
+crearcurso(1, 102, 'MB2', []);
+consola('Cursos creados');
+consolaln('Cursos de la red Ingenieria en Ciencias y Sistemas');
+cursoPorCodigo(1);
