@@ -247,7 +247,7 @@ class AnalizadorLexico:
                     estado = 'B1'
                 else:
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, no se abrio parentesis', i.lexema, i.fila, i.columna))                  
-                    break
+                    
             
             #Analisis de estado B1
             elif estado == 'B1':
@@ -258,8 +258,7 @@ class AnalizadorLexico:
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, se esperaba una cadena', lexema, fila, columna))
-                    
-                    break             
+                                
             elif estado == 'B3':
                 if i.lexema == ')':
                     estado = 'B4'
@@ -269,7 +268,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto cerrar parentesis', lexema, fila, columna))
                     
-                    break
             elif estado == 'B4':
                 if i.lexema == ';':
                     estado = 'A'
@@ -279,13 +277,12 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto ;', lexema, fila, columna))
                     
-                    break
             elif estado == 'C':
                 if i.lexema == '(':
                     estado = 'C1'
                 else:
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, no se abrio parentesis', i.lexema, i.fila, i.columna))
-                    break
+                    
             elif estado == 'C1':
                 if i.tipo == 'NUMERO':
                     estado = 'C2'
@@ -295,7 +292,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, se esperaba un numero', lexema, fila, columna))
                     
-                    break
             elif estado == 'C2':
                 if i.lexema == ')':
                     estado = 'C3'                    
@@ -305,7 +301,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto cerrar parentesis', lexema, fila, columna))
                     
-                    break
             elif estado == 'C3':                
                 if i.lexema == ';':
                     estado = 'A'
@@ -314,13 +309,13 @@ class AnalizadorLexico:
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto cerrar con ;', lexema, fila, columna))
-                    break
+                    
             elif estado == 'D':
                 if i.lexema == '(':
                     estado = 'D1'
                 else:
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, no se abrio parentesis', i.lexema, i.fila, i.columna))
-                    break
+                    
             elif estado == 'D1':
                 if i.tipo == 'NUMERO':
                     estado = 'D2'
@@ -330,7 +325,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, el codigo del curso debe ser un numero', lexema, fila, columna))
                     
-                    break
             elif estado == 'D2':
                 if i.lexema == ',':
                     estado = 'D3'
@@ -340,7 +334,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto coma', lexema, fila, columna))
                     
-                    break
             elif estado == 'D3':
                 if i.tipo == 'NUMERO':
                     estado = 'D4'
@@ -350,7 +343,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, se esperaba un numero', lexema, fila, columna))
                     
-                    break
             elif estado == 'D4':
                 if i.lexema == ',':
                     estado = 'D5'
@@ -360,7 +352,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto coma', lexema, fila, columna))
                     
-                    break
             elif estado == 'D5':
                 if i.tipo == 'CADENA':
                     estado = 'D6'
@@ -370,7 +361,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', lexema, fila, columna))
                     
-                    break
             elif estado == 'D6':
                 if i.lexema == ',':
                     estado = 'D7'
@@ -380,7 +370,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto coma', lexema, fila, columna))
                     
-                    break
             elif estado == 'D7':
                 if i.lexema == '[':
                     estado = 'D8'
@@ -390,7 +379,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto abrir corchete', lexema, fila, columna))
                     
-                    break
             elif estado == 'D8':
                 if i.tipo == 'NUMERO' :
                     estado = 'D9'
@@ -402,7 +390,6 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', lexema, fila, columna))
                     
-                    break
             elif estado == 'D9':
                 if i.lexema == ']':
                     estado = 'D10'
@@ -412,7 +399,7 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', lexema, fila, columna))
                     
-                    break
+                   
             elif estado == 'D10':
                 if i.lexema == ')':
                     estado = 'D11'
@@ -421,7 +408,7 @@ class AnalizadorLexico:
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto cerrar parentesis', lexema, fila, columna))                    
-                    break
+                    
             elif estado == 'D11':
                 if i.lexema == ';':
                     estado = 'A'
@@ -431,16 +418,14 @@ class AnalizadorLexico:
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto cerrar con ;', lexema, fila, columna))
                     
-                    break
             else:
                 self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', i.lexema, i.fila, i.columna))
                 break
        
         if estado != 'A':
             print('Error sintactico, cadena incompleta en su ultima linea'+" "+estado)
-        print("Errores Sintacticos:")
-        for x in self.listErrorSintactico:
-             print(x.descripcion, x.tipo, x.fila, x.columna)
+        
+
                    
 
 
@@ -450,4 +435,7 @@ class AnalizadorLexico:
             print(x.tipo, x.lexema, x.fila, x.columna)
         print("Errores:")
         for x in self.listError:
-             print(x.descripcion, x.tipo, x.fila, x.columna) 
+             print(x.descripcion, x.tipo, x.fila, x.columna)
+        print("Errores Sintacticos:")
+        for x in self.listErrorSintactico:
+             print(x.descripcion, x.tipo, x.fila, x.columna)             
