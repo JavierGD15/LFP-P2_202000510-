@@ -14,4 +14,10 @@ class Token_Error(Token):
         self.tipo = tipo
         self.fila = fila
         self.columna = columna
-        
+
+class Token_Error_sintactico(Token):
+    def __init__(self, descripcion, tipo, fila, columna):
+        self.descripcion = descripcion
+        self.tipo = tipo
+        self.fila = fila
+        self.columna = columna        
