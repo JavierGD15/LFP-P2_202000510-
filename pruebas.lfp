@@ -1,7 +1,15 @@
 nombre_de_red('Ingenieria en Ciencias y Sistemas');
-crearcurso(1, 17, 'Social Humanistica 1', []);
-crearcurso(1, 101, 'MB1', []);
-crearcurso(1, 102, 'MB2', []);
+crearcurso(1, 17, 'Social Humanistica 1', [12]);
+crearcurso(1, 101, 'MB1', [2]);
+crearcurso(1, 102, 'MB2', [22]);
+consola('Cursos creados');
 consola('Cursos creados');
 consolaln('Cursos de la red Ingenieria en Ciencias y Sistemas');
+consolaln('hola mundo');
 cursoPorCodigo(1);
+
+crearcurso(1, 17, 'Social Humanistica 1', [12]);
+crearcurso(1, 101, 'MB1', []);
+crearcurso(2, 103, 'MB2', [101]);
+crearcurso(2, 147, 'Fisica Basica', [101]);
+crearcurso(3, 150, 'Fisica 1', [103,147]);

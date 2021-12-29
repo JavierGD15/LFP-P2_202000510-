@@ -1,4 +1,4 @@
-from Token import Token
+from Token import Token, opcionesD, opcionesB, opcionesC
 from Token import Token_Error, Token_Error_sintactico
 
 class AnalizadorLexico:
@@ -6,6 +6,9 @@ class AnalizadorLexico:
         self.listtoken = []
         self.listError = []
         self.listErrorSintactico = []
+        self.opcionesD = []
+        self.opcionesB = []
+        self.opcionesC = []
 
     def analizar(self, archivo):
         self.listtoken = []
@@ -224,6 +227,13 @@ class AnalizadorLexico:
 
     #Anlisis sintactico
     def analisisSintactico(self):
+        semestre = 0
+        codigo = 0
+        nombre = ""
+        prerrquisitos = []
+        cadena = ""
+        numeros = 0
+        instruccion = ""
        
         estado = 'A'
         for i in self.listtoken:
@@ -232,14 +242,23 @@ class AnalizadorLexico:
                 #Clasifiación B
                 if i.lexema == 'nombre_de_red' or i.lexema == 'consola' or i.lexema == 'consolaln' or  i.lexema == 'cursoPorNombre'  or i.lexema == 'generarRed':
                  estado = 'B'
+                 cadena = ""
+                 instruccion = i.lexema
+
 
                 #Clasifiación C
                 elif i.lexema == 'cursoPorSemestre' or i.lexema == 'cursoPorCodigo' or i.lexema == 'cursoPrerrequisitos' or i.lexema == 'cursosPostrrequisitos':
                     estado = 'C'
+                    numeros = 0
+                    instruccion = i.lexema
             
                 #Clasifiación D
                 elif i.lexema == 'crearcurso':
                     estado = 'D'
+                    semestre = 0
+                    codigo = 0
+                    nombre = ""
+                    prerrquisitos = []                    
             
             #Analisis de estado B
             elif estado == 'B':
@@ -253,6 +272,7 @@ class AnalizadorLexico:
             elif estado == 'B1':
                 if i.tipo == 'CADENA':
                     estado = 'B3'
+                    cadena = i.lexema
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
@@ -271,6 +291,8 @@ class AnalizadorLexico:
             elif estado == 'B4':
                 if i.lexema == ';':
                     estado = 'A'
+                    self.opcionesB.append(opcionesB(instruccion,cadena))                    
+
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
@@ -286,6 +308,7 @@ class AnalizadorLexico:
             elif estado == 'C1':
                 if i.tipo == 'NUMERO':
                     estado = 'C2'
+                    numeros = i.lexema
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
@@ -304,6 +327,7 @@ class AnalizadorLexico:
             elif estado == 'C3':                
                 if i.lexema == ';':
                     estado = 'A'
+                    self.opcionesC.append(opcionesC(instruccion,numeros))
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
@@ -318,6 +342,7 @@ class AnalizadorLexico:
                     
             elif estado == 'D1':
                 if i.tipo == 'NUMERO':
+                    semestre = i.lexema
                     estado = 'D2'
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
@@ -336,6 +361,7 @@ class AnalizadorLexico:
                     
             elif estado == 'D3':
                 if i.tipo == 'NUMERO':
+                    codigo = i.lexema
                     estado = 'D4'
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
@@ -354,6 +380,7 @@ class AnalizadorLexico:
                     
             elif estado == 'D5':
                 if i.tipo == 'CADENA':
+                    nombre = i.lexema
                     estado = 'D6'
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
@@ -381,6 +408,9 @@ class AnalizadorLexico:
                     
             elif estado == 'D8':
                 if i.tipo == 'NUMERO' :
+                    prerrquisitos.append(i.lexema)
+                    estado = 'D8'
+                elif i.lexema == ',':
                     estado = 'D9'
                 elif i.lexema == ']':
                     estado = 'D10'
@@ -391,13 +421,14 @@ class AnalizadorLexico:
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', lexema, fila, columna))
                     
             elif estado == 'D9':
-                if i.lexema == ']':
-                    estado = 'D10'
+                if i.tipo == 'NUMERO' :
+                    prerrquisitos.append(i.lexema)
+                    estado = 'D8'
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
-                    self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', lexema, fila, columna))
+                    self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, ningun numero despues de la coma', lexema, fila, columna))
                     
                    
             elif estado == 'D10':
@@ -411,12 +442,14 @@ class AnalizadorLexico:
                     
             elif estado == 'D11':
                 if i.lexema == ';':
+                    self.opcionesD.append(opcionesD(semestre,codigo, nombre, prerrquisitos))
                     estado = 'A'
                 else:
                     lexema = self.listtoken[self.listtoken.index(i)-1].lexema
                     fila = self.listtoken[self.listtoken.index(i)-1].fila
                     columna = self.listtoken[self.listtoken.index(i)-1].columna
                     self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico, falto cerrar con ;', lexema, fila, columna))
+
                     
             else:
                 self.listErrorSintactico.append(Token_Error_sintactico('Error sintactico', i.lexema, i.fila, i.columna))

@@ -21,3 +21,20 @@ class Token_Error_sintactico(Token):
         self.tipo = tipo
         self.fila = fila
         self.columna = columna        
+
+class opcionesD:
+    def __init__(self, semestre, codigo, nombres,prerrequisitos):
+        self.semestre = semestre
+        self.codigo = codigo
+        self.nombres = nombres
+        self.prerrequisitos = prerrequisitos
+
+class opcionesB:
+    def __init__(self, instruccion, cadena):
+        self.instruccion = instruccion
+        self.cadena = cadena
+
+class opcionesC:
+    def __init__(self, instruccion, numeros):
+        self.instruccion = instruccion
+        self.numeros = numeros
