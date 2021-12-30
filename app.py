@@ -4,14 +4,12 @@ from tkinter import Button, Label,Tk,filedialog, ttk, Frame, PhotoImage
 from tkinter.font import BOLD 
 from automata import AnalizadorLexico
 from tkinter import Button, Label,Tk,filedialog, ttk, Frame, PhotoImage
-import pygame
-import random
-import mutagen
+import os
 
 opcionesB = []
 opcionesC = []
 opcionesD = []
-nombre = ""
+nombre1 = ""
 
 def leerArchivo(self):   
     global caja1, caja2    
@@ -46,7 +44,7 @@ def analizar (self):
         a.imprimir()
     
 def imprimir_opciones():
-    global caja1, caja2 
+    global caja1, caja2,nombre1
     caja2.delete("1.0",END)
 
     #pendiente si lo piden o no
@@ -59,7 +57,7 @@ def imprimir_opciones():
 
     for i in opcionesB:
         if i[0] == "nombre_de_red":
-            nombre = i[1]
+            nombre1 = i[1]
         elif i[0] == "consola":
             caja2.insert(END, i[1])
         elif i[0] == "consolaln":
@@ -70,6 +68,7 @@ def imprimir_opciones():
                     caja2.insert(END,"\n"+ "Semestre: " + str(x[0]) + " Codigo: " + str(x[1]) + " Nombre: " + str(x[2]) + " Prerrequisitos: " + str(x[3]) + "\n")
         elif i[0] == "generarRed":
             caja2.insert(END,"\n"+"Generando Red...")
+            print(i[1])
             generarRed(i[1])
             
     
@@ -114,20 +113,34 @@ def abrir (self):
     
 
 def generarRed(nombre):
+    global nombre1,caja2
     g = open(nombre, "w")   
-    
-    mensaje  = '<html><head><title>Reporte de Errores</title></head><body><table border="1"><tr><th>Linea</th><th>Columna</th><th>Descripcion</th><th>Tipo</th></tr>'
-    g.write(mensaje)
-    cuerpo = ""
-    fin = "</head></body></html>"
-
-    for i in a.listError:
-        cuerpo += "<tr><td>" + str(i.fila) + "</td><td>" + str(i.columna) + "</td><td>" + str(i.descripcion) + "</td><td>" + str(i.tipo) +"</td></tr>"
+    if opcionesD != []:
+        g.write("digraph G{\n")
+        g.write('rankdir="LR"\n')
+        g.write('label="'+nombre+'"')
+        g.write("node[shape=record, style=filled]\n")
+        for i in opcionesD:
+            g.write("\"" + str(i[1]) + "\"" + "[label=\"" +"Codigo: "+ str(i[1])+"|"+"Nombre: "+ str(i[2]) + "\"]\n")
+        for i in opcionesD:
+            for j in i[3]:
+                g.write("\"" + str(j) + "\"" + "->" + "\"" + str(i[1]) + "\"" + "\n")
+        g.write("}")
+        g.close()
+        os.system("dot -Tpng " + nombre1 + " -o " + nombre1 + ".png")
+        os.system("start " + nombre1 + ".png")
+        caja2.insert(END,"\n"+"Red Generada")
+      
         
-        g.write(cuerpo)
-    g.write(fin)
-    g.close()
+    else:
+        caja2.insert(END,"\n"+"No hay cursos para generar")
 
+
+def arbol(self):
+    a = AnalizadorLexico()
+    a.analizar(caja1.get("1.0",END))
+    a.analisisSintactico()
+    
 
 
 
