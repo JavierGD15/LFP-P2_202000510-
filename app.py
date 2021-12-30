@@ -40,6 +40,7 @@ def analizar (self):
             opcionesB.append((i.instruccion, i.cadena))            
         for i in a.opcionesC:            
             opcionesC.append((i.instruccion, i.numeros))
+        
         imprimir_opciones()    
     else:
         a.imprimir()
@@ -69,8 +70,8 @@ def imprimir_opciones():
                     caja2.insert(END,"\n"+ "Semestre: " + str(x[0]) + " Codigo: " + str(x[1]) + " Nombre: " + str(x[2]) + " Prerrequisitos: " + str(x[3]) + "\n")
         elif i[0] == "generarRed":
             caja2.insert(END,"\n"+"Generando Red...")
-            generarRed()
-            caja2.insert(END,"\n"+"Red Generada")
+            generarRed(i[1])
+            
     
     for i in opcionesC:
         if i[0]=='cursoPorSemestre':
@@ -109,18 +110,25 @@ def abrir (self):
     nombre = ""
     prerrquisitos = []
 
-            
-def generarRed():
-    global nombre
-    print(nombre)
-    pygame.init()
-    pygame.display.set_caption(nombre)
-    screen = pygame.display.set_mode((800, 600))
-    screen.fill((255, 255, 255))
-    pygame.display.flip()
-    pygame.display.update()
-    pygame.time.wait(1000)
-    pygame.quit()
+
+    
+
+def generarRed(nombre):
+    g = open(nombre, "w")   
+    
+    mensaje  = '<html><head><title>Reporte de Errores</title></head><body><table border="1"><tr><th>Linea</th><th>Columna</th><th>Descripcion</th><th>Tipo</th></tr>'
+    g.write(mensaje)
+    cuerpo = ""
+    fin = "</head></body></html>"
+
+    for i in a.listError:
+        cuerpo += "<tr><td>" + str(i.fila) + "</td><td>" + str(i.columna) + "</td><td>" + str(i.descripcion) + "</td><td>" + str(i.tipo) +"</td></tr>"
+        
+        g.write(cuerpo)
+    g.write(fin)
+    g.close()
+
+
 
 
 
@@ -139,10 +147,67 @@ class UI(Frame):
         boton_buscar.place(x=690,y=10)
         boton_analizar = Button(self.parent, text="Analizar", command= lambda: analizar(self))
         boton_analizar.place(x=770,y=10)
-        boton_reportes = Button(self.parent, text="Reportes", command= lambda: abrir(self))
+        boton_reportes = Button(self.parent, text="Reportes", command= lambda: imprimirReportes())
         boton_reportes.place(x=870,y=10)
 
+def imprimirReportes():
+    #guardar tokens en pdf
+    global caja1, caja2
+    caja2.insert(END,"\n"+"Generando PDF...")
+    
+    a = AnalizadorLexico()
+    a.analizar(caja1.get("1.0",END))
+    a.analisisSintactico()
+ 
+    
+#Generacion de reportes Lexicos
+    g = open("reporteErrores.html", "w")
+    
+    
+    mensaje  = '<html><head><title>Reporte de Errores</title></head><body><table border="1"><tr><th>Linea</th><th>Columna</th><th>Descripcion</th><th>Tipo</th></tr>'
+    g.write(mensaje)
+    cuerpo = ""
+    fin = "</head></body></html>"
 
+    for i in a.listError:
+        cuerpo += "<tr><td>" + str(i.fila) + "</td><td>" + str(i.columna) + "</td><td>" + str(i.descripcion) + "</td><td>" + str(i.tipo) +"</td></tr>"
+        
+        g.write(cuerpo)
+    g.write(fin)
+    g.close()
+
+#Generacion de reportes sintacticos
+    g = open("reporteErroresSintácticos.html", "w")
+    
+    
+    mensaje  = '<html><head><title>Reporte de Errores Sintácticos</title></head><body><table border="1"><tr><th>Fila</th><th>Columna</th><th>Descripcion</th><th>Tipo</th></tr>'
+    g.write(mensaje)
+    cuerpo = ""
+    fin = "</head></body></html>"
+
+    for i in a.listErrorSintactico:
+        cuerpo += "<tr><td>" + str(i.fila) + "</td><td>" + str(i.columna) + "</td><td>" + str(i.descripcion) + "</td><td>" + str(i.tipo) +"</td></tr>"
+        
+        g.write(cuerpo)
+    g.write(fin)
+    g.close()
+
+#Generacion de tokens
+    g = open("reporteTokens.html", "w")
+    
+    
+    mensaje  = '<html><head><title>Reporte de Tokens</title></head><body><table border="1"><tr><th>Fila</th><th>Columna</th><th>Lexema</th><th>Tipo</th></tr>'
+    g.write(mensaje)
+    cuerpo = ""
+    fin = "</head></body></html>"
+
+    for i in a.listtoken:
+        cuerpo = "<tr><td>" + str(i.fila) + "</td><td>" + str(i.columna) + "</td><td>" + str(i.lexema) + "</td><td>" + str(i.tipo) +"</td></tr>"
+        print(i.tipo, i.lexema, i.fila, i.columna)
+        g.write(cuerpo)
+    g.write(fin)
+    g.close()
+    caja2.insert(END,"\n"+"Generado con exito")
 
 if __name__ == "__main__":
     global caja1, caja2
