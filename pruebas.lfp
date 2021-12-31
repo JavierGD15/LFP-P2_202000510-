@@ -7,7 +7,11 @@ consola('Cursos creados');
 consolaln('Cursos de la red Ingenieria en Ciencias y Sistemas');
 consolaln('hola mundo');
 cursoPorCodigo(1);
-
+cursoPorSemestre(1);
+cursoPorNombre('MB1');
+cursosPrerrequisitos(150);
+cursosPostrrequisitos(150);
+generarRed('Ingenieria en Ciencias y Sistemas');
 crearcurso(1, 17, 'Social Humanistica 1', [12]);
 crearcurso(1, 101, 'MB1', []);
 crearcurso(2, 103, 'MB2', [101]);
