@@ -150,7 +150,7 @@ class UI(Frame):
     def __init__(self, parent=None): 
         Frame.__init__(self, parent) 
         self.parent = parent 
-        
+        self.parent.title("Generador de Mallas Curriculares")
         self.init_ui()
 
     def init_ui(self):
@@ -229,6 +229,12 @@ if __name__ == "__main__":
     APP = UI(parent=ROOT)
     carnet = Label(ROOT, text="Proyecto 2 - 202000510", font=("Arial Bold", 12))
     carnet.place(x=20, y=10)
+    ingresar = Label(ROOT, text="Ingrese el código que desea analizar:", font=("Arial Bold", 12))
+    ingresar.place(x=20, y=75)
+    resultado = Label(ROOT, text="Resultado:", font=("Arial Bold", 12))
+    resultado.place(x=750, y=75)
+    
+
     caja1 = Text(ROOT, width=65, height=30)
     caja1.place(x=20, y=100)
     caja2 = Text(ROOT, width=58, height=30)
